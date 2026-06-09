@@ -1,0 +1,138 @@
+name: CI - FastAPI Tests
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12.4'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Ensure project root marker
+        run: touch .project-root
+
+      - name: Verify MongoDB connection secret
+        env:
+          MONGODB_URL: ${{ secrets.MONGODB_URL_KEY }}
+        run: |
+          echo "Using MongoDB URL from secrets"
+          # Optional: Uncomment to verify connection if needed
+          # python -c "import os, pymongo; print(pymongo.MongoClient(os.environ['MONGODB_URL_KEY']).server_info())"
+
+
+
+
+
+
+
+
+
+# name: CI-CD without Docker
+
+# on:
+#   push:
+#     branches: [ "main" ]
+
+# jobs:
+#   deploy:
+#     runs-on: self-hosted   # your PC as runner
+
+#     steps:
+#       - name: Checkout latest code
+#         uses: actions/checkout@v4
+
+#       # Optional: Activate virtual environment if you have one
+#       # - name: Activate venv
+#       #   shell: powershell
+#       #   run: |
+#       #     .\venv\Scripts\Activate.ps1
+
+#       - name: Restart FastAPI app with logging
+#         shell: powershell
+#         run: |
+#           $logFile = "$PSScriptRoot\fastapi.log"
+
+#           echo "Stopping old server if running..."
+#           try {
+#               # Kill all python processes silently
+#               taskkill /F /IM python.exe -ErrorAction SilentlyContinue
+#               echo "Old server stopped (if it was running)" | Tee-Object -FilePath $logFile -Append
+#           } catch {
+#               echo "No python process was running" | Tee-Object -FilePath $logFile -Append
+#           }
+
+#           echo "Starting FastAPI app in background..."
+#           # Start FastAPI in background, log output to file
+#           $proc = Start-Process -FilePath python -ArgumentList "app.py" -NoNewWindow -PassThru
+#           echo "FastAPI started with PID: $($proc.Id)" | Tee-Object -FilePath $logFile -Append
+#           echo "Logs are being saved to: $logFile" | Tee-Object -FilePath $logFile -Append
+
+
+
+# name: Deploy Application Docker Image to EC2 instance
+
+# on:
+#   push:
+#     branches: [main]
+
+# jobs:
+#   Continuous-Integration:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: Checkout
+#         uses: actions/checkout@v2
+
+#       - name: Configure AWS credentials
+#         uses: aws-actions/configure-aws-credentials@v1
+#         with:
+#           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#           aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+
+#       - name: Login to Amazon ECR
+#         id: login-ecr
+#         uses: aws-actions/amazon-ecr-login@v1
+
+#       - name: Build, tag, and push image to Amazon ECR
+#         id: build-image
+#         env:
+#           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+#           ECR_REPOSITORY: ${{ secrets.ECR_REPO }}
+#           IMAGE_TAG: latest
+#         run: |
+#           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .  
+#           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+#           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+
+#   Continuous-Deployment:
+#     needs: Continuous-Integration
+#     runs-on: self-hosted
+#     steps:
+#       - name: Checkout
+#         uses: actions/checkout@v3
+
+#       - name: Configure AWS credentials
+#         uses: aws-actions/configure-aws-credentials@v1
+#         with:
+#           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#           aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+
+#       - name: Login to Amazon ECR
+#         id: login-ecr
+#         uses: aws-actions/amazon-ecr-login@v1
+
+#       - name: Run Docker Image to serve users
+#         run: |
+#          docker run -d -e AWS_ACCESS_KEY_ID="${{ secrets.AWS_ACCESS_KEY_ID }}" -e AWS_SECRET_ACCESS_KEY="${{ secrets.AWS_SECRET_ACCESS_KEY }}" -e AWS_DEFAULT_REGION="${{ secrets.AWS_DEFAULT_REGION }}" -e MONGODB_URL="${{ secrets.MONGODB_URL }}" -p 5000:5000 "${{ steps.login-ecr.outputs.registry }}"/"${{ secrets.ECR_REPO }}":latest
