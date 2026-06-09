@@ -41,27 +41,30 @@ The project follows a modular MLOps architecture designed to improve reproducibi
 
 ---
 
-## Project Architecture
+## Project Workflow
 
-Data Source (MongoDB Atlas)
-↓
+```text
+MongoDB Atlas
+   ↓
 Data Ingestion
-↓
+   ↓
 Data Validation
-↓
+   ↓
 Data Transformation
-↓
+   ↓
 Model Training
-↓
+   ↓
 Model Evaluation
-↓
+   ↓
 Model Registry
-↓
-FastAPI Prediction Service
-↓
+   ↓
+FastAPI API Layer
+   ↓
 Docker Deployment
-↓
-Monitoring & CI/CD
+   ↓
+Monitoring (Prometheus + Grafana)
+```
+
 
 ---
 
