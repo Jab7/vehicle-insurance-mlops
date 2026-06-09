@@ -1,106 +1,150 @@
-Here’s a clean, professional, and recruiter-friendly **README.md** that summarizes your project clearly without overloading it with implementation details, but still shows you understand MLOps, data engineering, and deployment workflows. I’ll also highlight the fact you used Render instead of AWS and added a custom model registry.
+# Vehicle Insurance Response Prediction - End-to-End MLOps Pipeline
+
+## Overview
+
+This project implements an end-to-end machine learning pipeline for predicting customer response to vehicle insurance offers. The system covers the complete ML lifecycle including data ingestion, validation, transformation, model training, evaluation, version management, API deployment, and monitoring.
+
+The project follows a modular MLOps architecture designed to improve reproducibility, maintainability, and deployment readiness of machine learning workflows.
 
 ---
 
-# Vehicle Price Prediction – End-to-End ML Project (MLOps)
+## Key Features
 
-This project demonstrates a **complete Machine Learning workflow**: from dataset ingestion and MongoDB integration to model training, evaluation, and cloud deployment.
-It follows a production-grade structure inspired by industry practices — modular code, pipelines, CI/CD, and containerized deployment — and is deployed on **Render** (as an alternative to AWS).
+### Data Pipeline
 
----
+* Automated data ingestion from MongoDB Atlas
+* Schema-based data validation
+* Feature preprocessing and transformation
+* Class imbalance handling using SMOTEENN
 
-## **Key Features**
+### Model Development
 
-* **Data Pipeline**
+* Random Forest based classification pipeline
+* Automated model evaluation using multiple performance metrics
+* Custom model registry for model version management
+* Artifact tracking and reusable preprocessing workflows
 
-  * Ingest raw data from MongoDB Atlas
-  * Perform automated **Data Validation** and **Feature Engineering**
-  * Transform data into training-ready format
+### Deployment
 
-* **Model Pipeline**
+* FastAPI-based prediction service
+* Dockerized application deployment
+* Environment-based configuration management
+* Cloud deployment support
 
-  * Modular **training pipeline** with configuration management
-  * Custom **model registry (local filesystem)** instead of AWS S3
-  * Automatic **model evaluation** and versioning
+### Monitoring & Operations
 
-* **Deployment**
-
-  * FastAPI backend with REST endpoints
-  * Streamlit/HTML interface for demo predictions
-  * **Deployed on Render Cloud** with environment variables for secrets (no AWS required)
-
-* **MLOps Practices**
-
-  * CI/CD workflow using GitHub Actions
-  * Logging & exception handling for traceability
-  * Virtual environment reproducibility (`requirements.txt`)
+* CI/CD workflows using GitHub Actions
+* Redis-based caching support
+* Prometheus metrics collection
+* Grafana dashboard integration
+* Structured logging and exception handling
 
 ---
 
-## **Project Workflow**
+## Project Architecture
 
-1. **Data Source**: Uploaded raw data to **MongoDB Atlas**
-2. **ETL Process**: Built modular ingestion, validation, and transformation steps
-3. **Model Training**: Implemented configurable training pipeline
-4. **Model Registry**: Stored trained models locally with version tracking
-5. **Deployment**:
-
-   * Backend served via **FastAPI**
-   * Hosted on **Render Dynamic Web Service**
-   * Environment variables configured for MongoDB URL and pipeline secrets
-
----
-
-## **Tech Stack**
-
-* **Languages**: Python 3.10+
-* **Frameworks**: FastAPI, Streamlit (UI demo)
-* **Data**: MongoDB Atlas
-* **Machine Learning**: scikit-learn, pandas, NumPy
-* **MLOps Tools**: GitHub Actions (CI), Render (CD)
-* **Other Utilities**: logging, pydantic, custom configuration management
-
----
-
-## **How to Run Locally**
-
-```bash
-# 1. Clone repo and navigate
-git clone https://github.com/<your-username>/<repo-name>.git
-cd <repo-name>
-
-# 2. Create and activate virtual environment
-conda create -n vehicle python=3.10 -y
-conda activate vehicle
-
-# 3. Install dependencies
-pip install -r requirements.txt
-
-# 4. Set environment variable (example for bash)
-export MONGODB_URL="mongodb+srv://<username>:<password>@cluster-url"
-
-# 5. Start FastAPI server
-uvicorn app:app --reload
-```
+Data Source (MongoDB Atlas)
+↓
+Data Ingestion
+↓
+Data Validation
+↓
+Data Transformation
+↓
+Model Training
+↓
+Model Evaluation
+↓
+Model Registry
+↓
+FastAPI Prediction Service
+↓
+Docker Deployment
+↓
+Monitoring & CI/CD
 
 ---
 
-## **Project Structure**
+## Technology Stack
 
-```
-├── src/
-│   ├── components/          # Modular ML pipeline components
-│   ├── entity/              # Config and artifact entities
-│   ├── configuration/       # MongoDB connection, settings
-│   ├── pipelines/           # Training & prediction pipelines
-│   ├── utils/               # Logging, exception handling
+### Machine Learning
+
+* Python
+* Scikit-learn
+* Pandas
+* NumPy
+
+### Backend & APIs
+
+* FastAPI
+* Pydantic
+
+### MLOps
+
+* Docker
+* GitHub Actions
+* CI/CD Pipelines
+* Model Registry
+
+### Data Storage
+
+* MongoDB Atlas
+
+### Monitoring
+
+* Prometheus
+* Grafana
+
+### Deployment
+
+* Render
+
+---
+
+## Repository Structure
+
+```text
+src/
+├── components/
+│   ├── data_ingestion.py
+│   ├── data_validation.py
+│   ├── data_transformation.py
+│   ├── model_trainer.py
 │
-├── app.py                   # FastAPI entry point
-├── requirements.txt         # Dependencies
-├── render.yaml              # Render deployment config
-├── setup.py / pyproject.toml # Local package install
-└── README.md                # You are here
+├── pipeline/
+│   ├── training_pipeline.py
+│   └── prediction_pipeline.py
+│
+├── data_access/
+├── entity/
+├── configuration/
+└── utils/
+
+app.py
+Dockerfile
+requirements.txt
+README.md
 ```
 
 ---
 
+## Skills Demonstrated
+
+* End-to-End Machine Learning Pipelines
+* Data Validation & Feature Engineering
+* Model Version Management
+* API Development using FastAPI
+* Docker Containerization
+* CI/CD Automation
+* Monitoring & Observability
+* MLOps Best Practices
+
+---
+
+## Future Improvements
+
+* MLflow-based experiment tracking
+* Advanced model comparison framework
+* Automated retraining workflows
+* Kubernetes deployment
+* Cloud-native model serving
